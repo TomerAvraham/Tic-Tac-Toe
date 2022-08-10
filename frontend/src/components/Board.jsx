@@ -32,7 +32,7 @@ const Board = ({ game, playerId, socket }) => {
       setCanPlay(false);
       setMsg("Opponent turn");
     }
-  }, [game, playerId]);
+  }, [game, game.turn, playerId]);
 
   const renderCells = game.board.map((cell, index) => (
     <div

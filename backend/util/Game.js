@@ -1,10 +1,8 @@
-const initialBoard = ["", "", "", "", "", "", "", "", ""];
-
 class Game {
   constructor(p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
-    this.board = initialBoard;
+    this.board = ["", "", "", "", "", "", "", "", ""];
     this.winner = "";
     this.moves = 0;
     this.turn;
@@ -17,11 +15,14 @@ class Game {
     return false;
   }
 
-  restartGame(playerId) {
-    this.board = initialBoard;
-    this.moves = 0;
-    this.turn;
+  clearBoard() {
+    this.board = ["", "", "", "", "", "", "", "", ""];
+  }
 
+  restartGame(playerId) {
+    this.moves = 0;
+    this.turn = playerId;
+    this.clearBoard();
     if (playerId === this.p1) {
       this.p1 = null;
     } else {

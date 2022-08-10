@@ -11,10 +11,11 @@ const io = new Server(server, {
 });
 
 const Game = require("./util/Game");
-
+const users = {};
 let game = new Game();
 
 io.on("connection", (socket) => {
+  users[socket.id] = socket.id;
   let player = game.addPlayer(socket.id);
   if (player === false) {
     socket.emit("maxPlayer", "2 Players are already playing");
@@ -23,13 +24,24 @@ io.on("connection", (socket) => {
   io.emit("joinGame", game);
 
   socket.on("disconnect", () => {
-    game.restartGame(socket.id);
+    delete users[socket.id];
+    game.restartGame(Object.keys(users)[0]);
+    io.emit("gameRestart", game);
   });
 
   socket.on("move", (index) => {
     game.move(index);
     io.emit("playerMove", game);
   });
+
+  socket.on("playAgain", () => {
+    game = new Game();
+    Object.keys(users).forEach((user) => game.addPlayer(user));
+    console.log(game);
+    io.emit("gameRestart", game);
+  });
+
+  console.log(game);
 });
 
 const PORT = process.env.PORT || 8000;

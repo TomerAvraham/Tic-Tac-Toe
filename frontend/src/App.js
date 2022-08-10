@@ -25,6 +25,10 @@ const App = () => {
       setError(msg);
     });
 
+    socket.on("gameRestart", (game) => {
+      setGame(game);
+    });
+
     socket.on("playerMove", (game) => {
       setGame(game);
     });
@@ -39,6 +43,10 @@ const App = () => {
     };
   }, []);
 
+  const playAgainClick = () => {
+    socket.emit("playAgain");
+  };
+
   return (
     <div>
       <h1>Tic Tac Toe</h1>
@@ -47,8 +55,9 @@ const App = () => {
           <h1>Sorry, you cant play right now, {error}</h1>
         </div>
       ) : (
-        <div>
+        <div className="board-wrapper">
           <Board socket={socket} playerId={playerId} game={game} />
+          <button onClick={playAgainClick}>Play Again</button>
         </div>
       )}
     </div>
