@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
   io.emit("joinGame", game);
 
   socket.on("disconnect", () => {
-    game.restartGame();
+    game.restartGame(socket.id);
   });
 
   socket.on("move", (index) => {
