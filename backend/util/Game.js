@@ -1,3 +1,14 @@
+const WINNING_COMBO = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
 class Game {
   constructor(p1, p2) {
     this.p1 = p1;
@@ -37,48 +48,26 @@ class Game {
     let symbol = this.turn === this.p1 ? "x" : "o";
     this.board[index] = symbol;
 
-    this.checkWinner();
-
     if (symbol === "x") {
       this.turn = this.p2;
     } else {
       this.turn = this.p1;
     }
+    this.checkWinner();
   }
 
   checkWinner() {
-    this.checkRows();
-    this.checkColumns();
-    this.checkDiagonal();
-
-    if (this.moves >= 9) {
+    WINNING_COMBO.forEach((combo) => {
+      if (
+        this.board[combo[0]] &&
+        this.board[combo[0]] === this.board[combo[1]] &&
+        this.board[combo[0]] === this.board[combo[2]]
+      )
+        this.winner = this.board[combo[0]];
+    });
+    if (this.moves >= 9 && this.winner === "") {
       this.winner = "tie";
     }
-  }
-
-  checkRows() {
-    if (this.board[0] === this.board[1] && this.board[1] === this.board[2])
-      return (this.winner = this.board[0]);
-    if (this.board[3] === this.board[4] && this.board[4] === this.board[5])
-      return (this.winner = this.board[3]);
-    if (this.board[6] === this.board[7] && this.board[7] === this.board[8])
-      return (this.winner = this.board[6]);
-  }
-
-  checkColumns() {
-    if (this.board[0] === this.board[3] && this.board[3] === this.board[6])
-      return (this.winner = this.board[0]);
-    if (this.board[1] === this.board[4] && this.board[4] === this.board[7])
-      return (this.winner = this.board[1]);
-    if (this.board[2] === this.board[5] && this.board[5] === this.board[8])
-      return (this.winner = this.board[2]);
-  }
-
-  checkDiagonal() {
-    if (this.board[0] === this.board[4] && this.board[4] === this.board[8])
-      return (this.winner = this.board[0]);
-    if (this.board[2] === this.board[4] && this.board[4] === this.board[6])
-      return (this.winner = this.board[2]);
   }
 }
 
